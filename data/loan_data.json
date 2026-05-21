@@ -1,0 +1,348 @@
+{
+  "loan": {
+    "principal": 1125000.0,
+    "disbursement_date": "2022-05-31",
+    "start_date": "2022-06-01",
+    "tenure_years": 15,
+    "assumed_annual_rate": 8.5
+  },
+  "rate_changes": [],
+  "payments": [
+    {
+      "month": "2022-06",
+      "interest_charged": 2998.0,
+      "emi_paid": 2998.0,
+      "extra_principal": 0.0,
+      "interest_paid": 2998.0
+    },
+    {
+      "month": "2022-07",
+      "interest_charged": 7111.0,
+      "emi_paid": 7111.0,
+      "extra_principal": 0.0,
+      "interest_paid": 7111.0
+    },
+    {
+      "month": "2022-08",
+      "interest_charged": 7405.0,
+      "emi_paid": 7405.0,
+      "extra_principal": 0.0,
+      "interest_paid": 7405.0
+    },
+    {
+      "month": "2022-09",
+      "interest_charged": 7852.0,
+      "emi_paid": 7852.0,
+      "extra_principal": 0.0,
+      "interest_paid": 7852.0
+    },
+    {
+      "month": "2022-10",
+      "interest_charged": 7628.0,
+      "emi_paid": 7628.0,
+      "extra_principal": 0.0,
+      "interest_paid": 7628.0
+    },
+    {
+      "month": "2022-11",
+      "interest_charged": 8330.0,
+      "emi_paid": 8330.0,
+      "extra_principal": 0.0,
+      "interest_paid": 8330.0
+    },
+    {
+      "month": "2022-12",
+      "interest_charged": 8091.0,
+      "emi_paid": 8091.0,
+      "extra_principal": 0.0,
+      "interest_paid": 8091.0
+    },
+    {
+      "month": "2023-01",
+      "interest_charged": 8673.0,
+      "emi_paid": 11478.0,
+      "extra_principal": 0.0,
+      "interest_paid": 8673.0
+    },
+    {
+      "month": "2023-02",
+      "interest_charged": 8673.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8673.0
+    },
+    {
+      "month": "2023-03",
+      "interest_charged": 8014.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8014.0
+    },
+    {
+      "month": "2023-04",
+      "interest_charged": 8862.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8862.0
+    },
+    {
+      "month": "2023-05",
+      "interest_charged": 8556.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8556.0
+    },
+    {
+      "month": "2023-06",
+      "interest_charged": 8818.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8818.0
+    },
+    {
+      "month": "2023-07",
+      "interest_charged": 8513.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8513.0
+    },
+    {
+      "month": "2023-08",
+      "interest_charged": 8773.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8773.0
+    },
+    {
+      "month": "2023-09",
+      "interest_charged": 8752.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8752.0
+    },
+    {
+      "month": "2023-10",
+      "interest_charged": 8448.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8448.0
+    },
+    {
+      "month": "2023-11",
+      "interest_charged": 8706.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8706.0
+    },
+    {
+      "month": "2023-12",
+      "interest_charged": 8404.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8404.0
+    },
+    {
+      "month": "2024-01",
+      "interest_charged": 8659.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8659.0
+    },
+    {
+      "month": "2024-02",
+      "interest_charged": 8637.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8637.0
+    },
+    {
+      "month": "2024-03",
+      "interest_charged": 8059.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8059.0
+    },
+    {
+      "month": "2024-04",
+      "interest_charged": 8587.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8587.0
+    },
+    {
+      "month": "2024-05",
+      "interest_charged": 8288.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8288.0
+    },
+    {
+      "month": "2024-06",
+      "interest_charged": 8539.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8539.0
+    },
+    {
+      "month": "2024-07",
+      "interest_charged": 8241.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8241.0
+    },
+    {
+      "month": "2024-08",
+      "interest_charged": 8490.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8490.0
+    },
+    {
+      "month": "2024-09",
+      "interest_charged": 8466.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8466.0
+    },
+    {
+      "month": "2024-10",
+      "interest_charged": 8170.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8170.0
+    },
+    {
+      "month": "2024-11",
+      "interest_charged": 8416.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8416.0
+    },
+    {
+      "month": "2024-12",
+      "interest_charged": 8121.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8121.0
+    },
+    {
+      "month": "2025-01",
+      "interest_charged": 8365.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8365.0
+    },
+    {
+      "month": "2025-02",
+      "interest_charged": 8340.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8340.0
+    },
+    {
+      "month": "2025-03",
+      "interest_charged": 7324.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7324.0
+    },
+    {
+      "month": "2025-04",
+      "interest_charged": 8061.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 8061.0
+    },
+    {
+      "month": "2025-05",
+      "interest_charged": 7576.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7576.0
+    },
+    {
+      "month": "2025-06",
+      "interest_charged": 7881.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7881.0
+    },
+    {
+      "month": "2025-07",
+      "interest_charged": 7281.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7281.0
+    },
+    {
+      "month": "2025-08",
+      "interest_charged": 7464.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7464.0
+    },
+    {
+      "month": "2025-09",
+      "interest_charged": 7435.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7435.0
+    },
+    {
+      "month": "2025-10",
+      "interest_charged": 7167.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 7167.0
+    },
+    {
+      "month": "2025-11",
+      "interest_charged": 7210.0,
+      "emi_paid": 11478.0,
+      "extra_principal": 100000.0,
+      "interest_paid": 7210.0
+    },
+    {
+      "month": "2025-12",
+      "interest_charged": 6404.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 6404.0
+    },
+    {
+      "month": "2026-01",
+      "interest_charged": 6400.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 6400.0
+    },
+    {
+      "month": "2026-02",
+      "interest_charged": 6352.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 6352.0
+    },
+    {
+      "month": "2026-03",
+      "interest_charged": 5705.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 5705.0
+    },
+    {
+      "month": "2026-04",
+      "interest_charged": 6275.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 6275.0
+    },
+    {
+      "month": "2026-05",
+      "interest_charged": 6037.0,
+      "emi_paid": 11478.0,
+      "extra_principal": NaN,
+      "interest_paid": 6037.0
+    }
+  ]
+}
