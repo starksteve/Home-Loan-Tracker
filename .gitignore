@@ -19,6 +19,9 @@ htmlcov/
 # Streamlit cache
 .streamlit/cache/
 
+# Streamlit secrets (NEVER commit real tokens)
+.streamlit/secrets.toml
+
 # OS/editor
 .DS_Store
 Thumbs.db
@@ -27,3 +30,4 @@ Thumbs.db
 # Keep data folder tracked for this project, but ignore temporary backups
 data/*.bak
 data/*.tmp
+data/*.backup-*.json

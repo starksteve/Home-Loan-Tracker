@@ -59,6 +59,37 @@ This repo now includes deployment-ready files:
 
 If you want your actual loan history versioned too, commit `data/loan_data.json`.
 
+## Permanent data on Streamlit Cloud (important)
+
+By default, files written on Streamlit Cloud reset on every redeploy/restart.
+To make your entries **permanent**, this app can save data back to GitHub
+(`data/loan_data.json`) using the GitHub API.
+
+### One-time setup
+
+1. Create a **fine-grained Personal Access Token**:
+   - Go to https://github.com/settings/tokens?type=beta
+   - **Repository access**: only `Home-Loan-Tracker`
+   - **Permissions → Contents**: Read and write
+   - Generate and copy the token.
+
+2. In Streamlit Cloud → your app → **Settings → Secrets**, paste:
+
+   ```toml
+   [github]
+   token = "ghp_your_token_here"
+   repo = "starksteve/Home-Loan-Tracker"
+   path = "data/loan_data.json"
+   branch = "main"
+   ```
+
+3. Save. The app will now read/write your loan data directly in GitHub,
+   so it survives redeploys and every device sees the same data.
+
+> Running locally? Copy `.streamlit/secrets.toml.example` to
+> `.streamlit/secrets.toml` and fill the token (this file is gitignored).
+> Without secrets, the app just uses the local `data/loan_data.json` file.
+
 ## Tests
 
 ```powershell

@@ -175,73 +175,159 @@ with st.sidebar:
 
     project_to_end = st.toggle("Show projected future schedule", value=True)
 
-st.subheader("1) Monthly payment entries")
-st.caption(
-    "Add one row per month: first interest charged (-x), then EMI paid (+y)."
-)
-if "payments_working_df" not in st.session_state:
-    st.session_state["payments_working_df"] = _prepare_base_payments_df(data.get("payments", []))
+def _load_saved_payments() -> list[dict]:
+    """Load payments from disk as the single source of truth."""
+    saved = load_data(DATA_PATH)
+    return list(saved.get("payments", []) or [])
 
-st.caption("Use the table `+` button to add a row. Months auto-fill from 2022-06 in sequence.")
 
-editor_source_df = _with_derived_columns(st.session_state["payments_working_df"], HARD_PRINCIPAL)
+def _normalize_payments(raw_payments: list[dict]) -> list[dict]:
+    """Sort by month and normalize keys/values."""
+    normalized: list[dict] = []
+    for entry in raw_payments:
+        month = str(entry.get("month", "") or "").strip()
+        if not month:
+            continue
+        interest = entry.get("interest_charged")
+        if interest in (None, ""):
+            interest = entry.get("interest_paid")
+        normalized.append(
+            {
+                "month": month,
+                "interest_charged": float(interest) if interest not in (None, "") else 0.0,
+                "emi_paid": float(entry.get("emi_paid", 0) or 0),
+                "extra_principal": float(entry.get("extra_principal", 0) or 0),
+                "interest_paid": float(interest) if interest not in (None, "") else 0.0,
+            }
+        )
+    normalized.sort(key=lambda x: x["month"])
+    return normalized
 
-edited_payments = st.data_editor(
-    editor_source_df,
-    num_rows="dynamic",
+
+def _next_month(payments: list[dict]) -> str:
+    """Return the next month to add based on existing saved entries."""
+    if not payments:
+        return HARD_START_MONTH
+    last = max(p["month"] for p in payments)
+    return str(pd.Period(last, freq="M") + 1)
+
+
+def _persist(payments: list[dict]) -> None:
+    payload_to_save = {
+        "loan": {
+            "principal": HARD_PRINCIPAL,
+            "disbursement_date": HARD_DISBURSEMENT_DATE,
+            "start_date": HARD_START_DATE,
+            "tenure_years": HARD_TENURE_YEARS,
+            "assumed_annual_rate": float(assumed_annual_rate),
+        },
+        "rate_changes": [],
+        "payments": _normalize_payments(payments),
+    }
+    save_data(DATA_PATH, payload_to_save)
+
+
+# Source of truth is always the saved file (prevents entries disappearing).
+saved_payments = _normalize_payments(_load_saved_payments())
+
+st.subheader("1) Add a monthly entry")
+st.caption("Fill the fields below and click **Add / Update entry**. It saves instantly.")
+
+suggested_month = _next_month(saved_payments)
+
+with st.form("add_entry_form", clear_on_submit=True):
+    form_cols = st.columns([1, 1, 1, 1])
+    with form_cols[0]:
+        entry_month = st.text_input(
+            "Month (YYYY-MM)",
+            value=suggested_month,
+            help="Next month is auto-suggested. You can also edit an existing month to update it.",
+        )
+    with form_cols[1]:
+        entry_interest = st.number_input(
+            "Interest charged (-x)", min_value=0.0, value=0.0, step=100.0, format="%.2f"
+        )
+    with form_cols[2]:
+        entry_emi = st.number_input(
+            "EMI paid (+y)", min_value=0.0, value=0.0, step=100.0, format="%.2f"
+        )
+    with form_cols[3]:
+        entry_extra = st.number_input(
+            "Extra principal", min_value=0.0, value=0.0, step=100.0, format="%.2f"
+        )
+
+    submitted = st.form_submit_button("➕ Add / Update entry", type="primary", use_container_width=True)
+
+if submitted:
+    month_key = str(entry_month or "").strip()
+    valid_month = True
+    try:
+        month_key = str(pd.Period(month_key, freq="M"))
+    except Exception:
+        valid_month = False
+
+    if not valid_month:
+        st.error("Please enter a valid month in YYYY-MM format (e.g. 2026-07).")
+    else:
+        # Update if month exists, else append.
+        updated = False
+        for p in saved_payments:
+            if p["month"] == month_key:
+                p["interest_charged"] = float(entry_interest)
+                p["interest_paid"] = float(entry_interest)
+                p["emi_paid"] = float(entry_emi)
+                p["extra_principal"] = float(entry_extra)
+                updated = True
+                break
+        if not updated:
+            saved_payments.append(
+                {
+                    "month": month_key,
+                    "interest_charged": float(entry_interest),
+                    "interest_paid": float(entry_interest),
+                    "emi_paid": float(entry_emi),
+                    "extra_principal": float(entry_extra),
+                }
+            )
+        saved_payments = _normalize_payments(saved_payments)
+        _persist(saved_payments)
+        st.success(f"{'Updated' if updated else 'Added'} entry for {month_key} and saved.")
+
+# Delete controls
+if saved_payments:
+    del_cols = st.columns([2, 1])
+    with del_cols[0]:
+        month_to_delete = st.selectbox(
+            "Delete an entry (optional)",
+            options=["—"] + [p["month"] for p in saved_payments],
+        )
+    with del_cols[1]:
+        st.write("")
+        st.write("")
+        if st.button("🗑️ Delete", use_container_width=True) and month_to_delete != "—":
+            saved_payments = [p for p in saved_payments if p["month"] != month_to_delete]
+            saved_payments = _normalize_payments(saved_payments)
+            _persist(saved_payments)
+            st.success(f"Deleted entry for {month_to_delete}.")
+
+st.subheader("2) All entries")
+if not saved_payments:
+    st.info("No entries yet. Add your first month above (starts at 2022-06).")
+    display_df = pd.DataFrame(columns=["month", "interest_charged", "emi_paid", "extra_principal"])
+else:
+    display_df = pd.DataFrame(saved_payments)[["month", "interest_charged", "emi_paid", "extra_principal"]]
+
+display_df = _with_derived_columns(display_df, HARD_PRINCIPAL) if not display_df.empty else display_df
+
+st.dataframe(
+    display_df,
     use_container_width=True,
-    column_config={
-        "month": st.column_config.TextColumn("Month (YYYY-MM)", disabled=True),
-        "interest_charged": st.column_config.NumberColumn(
-            "Interest charged (-x)",
-            min_value=0.0,
-            format="%.2f",
-            help="Interest added first for the month.",
-        ),
-        "emi_paid": st.column_config.NumberColumn("EMI paid", min_value=0.0, format="%.2f"),
-        "principal_from_emi_calc": st.column_config.NumberColumn(
-            "Principal from EMI (auto)",
-            format="%.2f",
-            help="Auto-calculated as max(EMI - interest, 0).",
-            disabled=True,
-        ),
-        "interest_rate_pct_calc": st.column_config.NumberColumn(
-            "Interest % p.a. (auto)",
-            format="%.4f",
-            help="Auto-calculated from interest added for that month and opening principal.",
-            disabled=True,
-        ),
-        "extra_principal": st.column_config.NumberColumn(
-            "Extra principal paid",
-            min_value=0.0,
-            format="%.2f",
-            help="Any amount paid over EMI directly reducing principal.",
-        ),
-    },
-    key="payments_editor",
+    hide_index=True,
 )
 
-st.caption("Tip: if you don't add future months yet, projection uses the assumed annual rate.")
-
-save_col, info_col = st.columns([1, 3])
-with save_col:
-    save_clicked = st.button("💾 Save data", use_container_width=True, type="primary")
-with info_col:
-    st.caption("Enter history from June 2022 onward. Then add one row every month.")
-
-edited_base = edited_payments[["month", "interest_charged", "emi_paid", "extra_principal"]].copy()
-edited_base = _enforce_month_sequence(edited_base)
-if edited_base.empty:
-    edited_base = pd.DataFrame(
-        [{"month": HARD_START_MONTH, "interest_charged": None, "emi_paid": 0.0, "extra_principal": 0.0}]
-    )
-for numeric_col in ["interest_charged", "emi_paid", "extra_principal"]:
-    edited_base[numeric_col] = pd.to_numeric(edited_base[numeric_col], errors="coerce")
-
-st.session_state["payments_working_df"] = edited_base.reset_index(drop=True)
-
-payments_for_engine = st.session_state["payments_working_df"].copy()
-payments_for_engine["interest_paid"] = payments_for_engine["interest_charged"]
+payments_for_engine = pd.DataFrame(saved_payments) if saved_payments else pd.DataFrame(
+    columns=["month", "interest_charged", "emi_paid", "extra_principal", "interest_paid"]
+)
 
 payload = {
     "loan": {
@@ -252,12 +338,8 @@ payload = {
         "assumed_annual_rate": float(assumed_annual_rate),
     },
     "rate_changes": [],
-    "payments": payments_for_engine.where(pd.notnull(payments_for_engine), None).to_dict(orient="records"),
+    "payments": _normalize_payments(saved_payments),
 }
-
-if save_clicked:
-    save_data(DATA_PATH, payload)
-    st.success("Saved successfully.")
 
 schedule = build_schedule(
     payload["loan"],
