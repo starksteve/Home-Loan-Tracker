@@ -35,21 +35,37 @@ def _get_github_config() -> dict[str, str] | None:
     try:
         import streamlit as st  # imported lazily so tests don't require it
 
-        if "github" not in st.secrets:
+        try:
+            gh = st.secrets["github"]
+        except (KeyError, FileNotFoundError):
             return None
-        gh = st.secrets["github"]
+        except Exception:
+            return None
+
         token = gh.get("token")
         repo = gh.get("repo")
         if not token or not repo:
             return None
         return {
-            "token": token,
-            "repo": repo,
-            "path": gh.get("path", "data/loan_data.json"),
-            "branch": gh.get("branch", "main"),
+            "token": str(token).strip(),
+            "repo": str(repo).strip(),
+            "path": str(gh.get("path", "data/loan_data.json")).strip(),
+            "branch": str(gh.get("branch", "main")).strip(),
         }
     except Exception:
         return None
+
+
+def github_status() -> str:
+    """Return a human-readable status for the app to display."""
+    cfg = _get_github_config()
+    if cfg is None:
+        return "local-only"
+    try:
+        _github_read(cfg)
+        return "cloud-connected"
+    except Exception as exc:  # pragma: no cover - network dependent
+        return f"cloud-error: {exc}"
 
 
 def _github_read(cfg: dict[str, str]) -> tuple[dict[str, Any] | None, str | None]:

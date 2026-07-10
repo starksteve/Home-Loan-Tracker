@@ -175,6 +175,21 @@ with st.sidebar:
 
     project_to_end = st.toggle("Show projected future schedule", value=True)
 
+    st.divider()
+    try:
+        from loan_tracker.storage import github_status
+
+        status = github_status()
+    except Exception as exc:
+        status = f"unknown: {exc}"
+
+    if status == "cloud-connected":
+        st.success("☁️ Cloud storage: connected")
+    elif status == "local-only":
+        st.info("💾 Local storage only (no GitHub secret set)")
+    else:
+        st.warning(f"⚠️ Cloud storage issue:\n\n{status}")
+
 def _load_saved_payments() -> list[dict]:
     """Load payments from disk as the single source of truth."""
     saved = load_data(DATA_PATH)
