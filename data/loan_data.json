@@ -364,6 +364,13 @@
       "emi_paid": 11478.0,
       "extra_principal": 0.0,
       "interest_paid": 5418.0
+    },
+    {
+      "month": "2026-09",
+      "interest_charged": 5375.0,
+      "emi_paid": 11478.0,
+      "extra_principal": 0.0,
+      "interest_paid": 5375.0
     }
   ]
 }
